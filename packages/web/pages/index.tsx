@@ -1,36 +1,20 @@
-import { GetStaticProps } from 'next';
-import Link from 'next/link'
+import { FC } from 'react';
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 
-import { getPokemons } from '../graphql/getPokemons'
-import { Pokemon } from '../types/pokemon';
+import { App, Container } from '../styles/Container';
+import { Drag } from '../components/Drag';
+import { Sidebar } from '../components/Sidebar';
 
-type Props = {
-  pokemon: Array<Pokemon>
-}
-
-const Home: React.FC<Props> = ({ pokemon }) => (
-  <ul>
-    {pokemon.map((p) => (
-      <li key={p.name}>
-        <Link as={`/pokemon/${p.name}`} href="pokemon/[name]">
-          {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-          <a>
-            <h2 style={{ textTransform: 'capitalize' }}>{p.name}</h2>
-            <img src={p.image} alt={p.name}/>
-          </a>
-        </Link>
-      </li>
-    ))}
-  </ul>
+const Home: FC = () => (
+  <App>
+    <Sidebar/>
+    <Container>
+      <DndProvider backend={HTML5Backend}>
+        <Drag/>
+      </DndProvider>
+    </Container>
+  </App>
 );
-
-export const getStaticProps: GetStaticProps<Props> = async () => {
-  const pokemon = await getPokemons()
-  return {
-    props: {
-      pokemon,
-    },
-  }
-}
 
 export default Home;
