@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { ButtonGroup, Button } from '@chakra-ui/core';
 
 import { MenuContainer } from '../styles/Menu';
-import { WhiteColor, SquareColor, CircleColor, LineColor } from '../styles/Styles';
+import { WhiteColor, ButtonColor } from '../styles/Styles';
 
 export interface MenuProps {
     dispatch: any;
@@ -21,7 +21,7 @@ export class MenuComponent extends Component<MenuProps> {
                     <Button
                         size="sm"
                         leftIcon="plus-square"
-                        backgroundColor={SquareColor}
+                        backgroundColor={ButtonColor}
                         color={WhiteColor}
                         onClick={(e: any) => {
                             this.props.dispatch({ type: 'CREATE_SQUARE' })
@@ -30,13 +30,21 @@ export class MenuComponent extends Component<MenuProps> {
                     <Button
                         size="sm"
                         leftIcon="plus-square"
-                        backgroundColor={CircleColor}
-                        color={WhiteColor}>Circle</Button>
+                        backgroundColor={ButtonColor}
+                        color={WhiteColor}
+                        onClick={(e: any) => {
+                            this.props.dispatch({ type: 'CREATE_CIRCLE' })
+                        }}
+                        >Circle</Button>
                     <Button
                         size="sm"
                         leftIcon="plus-square"
-                        backgroundColor={LineColor}
-                        color={WhiteColor}>Line</Button>
+                        backgroundColor={ButtonColor}
+                        color={WhiteColor}
+                        onClick={(e: any) => {
+                            this.props.dispatch({ type: 'CREATE_LINE' })
+                        }}
+                        >Line</Button>
                 </ButtonGroup>
             </MenuContainer>
         )   

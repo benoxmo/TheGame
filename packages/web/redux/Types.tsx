@@ -16,8 +16,8 @@ export interface Circle {
 
 export interface Line {
     type: string;
-    x1: number;
-    y1: number;
+    left: number;
+    top: number;
     x2: number;
     y2: number;
 }

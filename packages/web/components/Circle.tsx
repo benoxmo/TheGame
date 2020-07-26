@@ -1,9 +1,9 @@
 import { FC } from 'react';
 import { useDrag } from 'react-dnd';
 
-import { SquareContainer } from '../styles/Mapping';
+import { CircleContainer } from '../styles/Mapping';
 
-export interface SquareProps {
+export interface CircleProps {
     id: number;
     type: string;
     left: number;
@@ -12,13 +12,13 @@ export interface SquareProps {
     height: number;
 }
 
-export const SquareComponent: FC<SquareProps> = ({ id, type, left, top, width, height }) => {
+export const CircleComponent: FC<CircleProps> = ({ id, type, left, top, width, height }) => {
     const [, drag] = useDrag({
         item: { id, type, left, top }
     })
 
     return (
-        <SquareContainer
+        <CircleContainer
             ref={drag}
             style={{ left, top, width, height }}
         />

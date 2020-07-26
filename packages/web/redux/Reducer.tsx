@@ -2,22 +2,18 @@ import thunk from 'redux-thunk';
 import { createStore, AnyAction, applyMiddleware, compose } from 'redux';
 import { MakeStore, createWrapper, Context, HYDRATE } from 'next-redux-wrapper';
 
-import { Square, Circle, Line } from './Types';
-
 export interface State {
     menu: boolean;
     menuX: number;
     menuY: number;
-    squares: Array<Square>;
-    circles: Array<Circle>;
-    lines: Array<Line>;
+    items: Array<any>;
 };
 
 export const initialState = {
     menu: false,
     menuX: 0,
     menuY: 0,
-    squares: [
+    items: [
         {
             type: 'SQUARE',
             left: 100,
@@ -41,7 +37,7 @@ export function reducer(state: State = initialState, action: AnyAction) {
             if (action.y) { state.menuY = action.y; }
             return { ...state };
         case 'CREATE_SQUARE':
-            state.squares = state.squares.concat({
+            state.items = state.items.concat({
                 type: 'SQUARE',
                 left: state.menuX,
                 top: state.menuY,
@@ -49,17 +45,32 @@ export function reducer(state: State = initialState, action: AnyAction) {
                 height: 100,
             });
             return { ...state };
+        case 'CREATE_CIRCLE':
+            state.items = state.items.concat({
+                type: 'CIRCLE',
+                left: state.menuX,
+                top: state.menuY,
+                width: 100,
+                height: 100,
+            });
+            return { ...state };
+        case 'CREATE_LINE':
+            state.items = state.items.concat({
+                type: 'LINE',
+                left: state.menuX,
+                top: state.menuY,
+                x2: state.menuX + 100,
+                y2: state.menuY + 100,
+            });
+            return { ...state };
         case 'UPDATE_POSITION':
-            switch(action.object) {
-                case 'SQUARE':
-                    state.squares = state.squares.map((square, index) => {
-                        if (action.index === index) {
-                            square.left = action.left;
-                            square.top = action.top;
-                        }
-                        return square;
-                    })
-            }
+            state.items = state.items.map((item, index) => {
+                if (action.index === index) {
+                    item.left = action.left;
+                    item.top = action.top;
+                }
+                return item;
+            })
             return { ...state };
     }
 

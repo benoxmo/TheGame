@@ -3,23 +3,23 @@ import { connect } from 'react-redux';
 import { useDrop, XYCoord } from 'react-dnd';
 
 import { MappingContainer } from '../styles/Mapping';
-import { Square, Circle, Line } from '../redux/Types';
+
 import { SquareComponent } from './Square';
+import { CircleComponent } from './Circle';
+import { LineComponent } from './Line';
 
 export interface ContainerProps {
   dispatch: any;
-  squares: Array<Square>;
+  items: Array<any>;
 }
 
-export const ContainerComponent: FC<ContainerProps> = ({ dispatch, squares }) => {
+export const ContainerComponent: FC<ContainerProps> = ({ dispatch, items }) => {
   const [, drop] = useDrop({
     accept: ['SQUARE', 'CIRCLE', 'LINE'],
     drop(item: any, monitor) {
       const delta = monitor.getDifferenceFromInitialOffset() as XYCoord;
       const left = Math.round(item.left + delta.x);
       const top = Math.round(item.top + delta.y);
-
-      console.log(item, left, top);
 
       dispatch({ type: 'UPDATE_POSITION', object: item.type, index: item.id, left, top })
     }
@@ -28,10 +28,43 @@ export const ContainerComponent: FC<ContainerProps> = ({ dispatch, squares }) =>
   return(
     <MappingContainer ref={drop}>
       {
-        squares.map((square, id) => {
-          return(
-            <SquareComponent id={id} type={'SQUARE'} left={square.left} top={square.top} width={square.width} height={square.height}/>
-          )
+        items.map((item, id) => {
+          switch (item.type) {
+            case 'SQUARE':
+              return(
+                <SquareComponent
+                  id={id}
+                  type={item.type}
+                  left={item.left}
+                  top={item.top}
+                  width={item.width}
+                  height={item.height}/>
+              )
+            case 'CIRCLE':
+              return(
+                <CircleComponent
+                  id={id}
+                  type={item.type}
+                  left={item.left}
+                  top={item.top}
+                  width={item.width}
+                  height={item.height}/>
+              )
+            case 'LINE':
+              return(
+                <LineComponent
+                  id={id}
+                  type={item.type}
+                  left={item.left}
+                  top={item.top}
+                  x2={item.x2}
+                  y2={item.y2}/>
+              )
+            default: 
+                return(
+                  <div/>
+                )
+          }
         })
       }
     </MappingContainer>
@@ -40,6 +73,6 @@ export const ContainerComponent: FC<ContainerProps> = ({ dispatch, squares }) =>
 
 export const Container = connect(
   (state: any) => ({
-    squares: state.squares
+    items: state.items,
   })
 )(ContainerComponent);
