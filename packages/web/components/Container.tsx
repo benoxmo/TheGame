@@ -1,70 +1,45 @@
-import React, { useState } from 'react'
-import { useDrop, XYCoord } from 'react-dnd'
-import update from 'immutability-helper'
-
-import { ItemTypes } from './ItemTypes'
-import { Box } from './Box'
-import { DragItem } from './interfaces'
+import { FC } from 'react';
+import { connect } from 'react-redux';
+import { useDrop, XYCoord } from 'react-dnd';
 
 import { MappingContainer } from '../styles/Mapping';
+import { Square, Circle, Line } from '../redux/Types';
+import { SquareComponent } from './Square';
 
 export interface ContainerProps {
-  hideSourceOnDrag: boolean
+  dispatch: any;
+  squares: Array<Square>;
 }
 
-export interface ContainerState {
-  boxes: { [key: string]: { top: number; left: number; title: string } }
-}
-
-export const Container: React.FC<ContainerProps> = ({ hideSourceOnDrag }) => {
-  const [boxes, setBoxes] = useState<{
-    [key: string]: {
-      top: number
-      left: number
-      title: string
-    }
-  }>({
-    a: { top: 20, left: 80, title: 'Drag me around' },
-    b: { top: 180, left: 20, title: 'Drag me too' },
-  })
-
+export const ContainerComponent: FC<ContainerProps> = ({ dispatch, squares }) => {
   const [, drop] = useDrop({
-    accept: ItemTypes.BOX,
-    drop(item: DragItem, monitor) {
-      const delta = monitor.getDifferenceFromInitialOffset() as XYCoord
-      const left = Math.round(item.left + delta.x)
-      const top = Math.round(item.top + delta.y)
-      moveBox(item.id, left, top)
-      return undefined
-    },
-  })
+    accept: ['SQUARE', 'CIRCLE', 'LINE'],
+    drop(item: any, monitor) {
+      const delta = monitor.getDifferenceFromInitialOffset() as XYCoord;
+      const left = Math.round(item.left + delta.x);
+      const top = Math.round(item.top + delta.y);
 
-  const moveBox = (id: string, left: number, top: number) => {
-    setBoxes(
-      update(boxes, {
-        [id]: {
-          $merge: { left, top },
-        },
-      }),
-    )
-  }
+      console.log(item, left, top);
 
-  return (
+      dispatch({ type: 'UPDATE_POSITION', object: item.type, index: item.id, left, top })
+    }
+  });
+
+  return(
     <MappingContainer ref={drop}>
-      {Object.keys(boxes).map((key) => {
-        const { left, top, title } = boxes[key]
-        return (
-          <Box
-            key={key}
-            id={key}
-            left={left}
-            top={top}
-            hideSourceOnDrag={hideSourceOnDrag}
-          >
-            {title}
-          </Box>
-        )
-      })}
+      {
+        squares.map((square, id) => {
+          return(
+            <SquareComponent id={id} type={'SQUARE'} left={square.left} top={square.top} width={square.width} height={square.height}/>
+          )
+        })
+      }
     </MappingContainer>
   )
 }
+
+export const Container = connect(
+  (state: any) => ({
+    squares: state.squares
+  })
+)(ContainerComponent);

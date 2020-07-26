@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { SquareColor } from './Styles';
 
 export const MappingContainer = styled.div`
     position: relative;
@@ -6,9 +7,8 @@ export const MappingContainer = styled.div`
     height: 100vh;
 `;
 
-export const BoxContainer = styled.div`
+export const SquareContainer = styled.div`
     position: absolute;
-    background: gray;
+    background: ${SquareColor};
     color: white;
-    padding: 15px 30px;;
 `;
