@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { SquareColor, CircleColor, LineColor } from './Styles';
+import { SquareColor, CircleColor } from './Styles';
 
 export const MappingContainer = styled.div`
     position: relative;
@@ -11,16 +11,32 @@ export const SquareContainer = styled.div`
     position: absolute;
     background: ${SquareColor};
     border-radius: 8px;
+    cursor: move;
 `;
 
 export const CircleContainer = styled.div`
     position: absolute;
-    background: ${CircleColor};
-    border-radius: 50%;
+    cursor: move;
+    div.circle {
+        width: 100%;
+        height: 100%;
+        background: ${CircleColor};
+        border-radius: 50%;
+        pointer-events: none;
+    }
 `;
 
-export const LineContainer = styled.div`
+export const LineContainer = styled.svg`
     position: absolute;
-    background: ${LineColor};
-    border-radius: 8px;
+    cursor: move;
+`;
+
+export const ImageContainer = styled.div`
+    position: absolute;
+    cursor: move;
+
+    img {
+        pointer-events: none;
+        height: 100%;
+    }
 `;

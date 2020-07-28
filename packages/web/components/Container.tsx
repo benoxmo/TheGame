@@ -4,9 +4,10 @@ import { useDrop, XYCoord } from 'react-dnd';
 
 import { MappingContainer } from '../styles/Mapping';
 
-import { SquareComponent } from './Square';
-import { CircleComponent } from './Circle';
-import { LineComponent } from './Line';
+import { Square } from './Square';
+import { Circle } from './Circle';
+import { Line } from './Line';
+import { Image } from './Image';
 
 export interface ContainerProps {
   dispatch: any;
@@ -15,7 +16,7 @@ export interface ContainerProps {
 
 export const ContainerComponent: FC<ContainerProps> = ({ dispatch, items }) => {
   const [, drop] = useDrop({
-    accept: ['SQUARE', 'CIRCLE', 'LINE'],
+    accept: ['SQUARE', 'CIRCLE', 'LINE', 'IMAGE'],
     drop(item: any, monitor) {
       const delta = monitor.getDifferenceFromInitialOffset() as XYCoord;
       const left = Math.round(item.left + delta.x);
@@ -32,33 +33,57 @@ export const ContainerComponent: FC<ContainerProps> = ({ dispatch, items }) => {
           switch (item.type) {
             case 'SQUARE':
               return(
-                <SquareComponent
+                <Square
+                  key={id}
                   id={id}
                   type={item.type}
                   left={item.left}
                   top={item.top}
                   width={item.width}
-                  height={item.height}/>
+                  height={item.height}
+                  url={item.url}
+                  popup={item.popup}/>
               )
             case 'CIRCLE':
               return(
-                <CircleComponent
+                <Circle
+                  key={id}
                   id={id}
                   type={item.type}
                   left={item.left}
                   top={item.top}
                   width={item.width}
-                  height={item.height}/>
+                  height={item.height}
+                  url={item.url}
+                  popup={item.popup}/>
               )
             case 'LINE':
               return(
-                <LineComponent
+                <Line
+                  key={id}
                   id={id}
                   type={item.type}
                   left={item.left}
                   top={item.top}
+                  width={item.width}
+                  height={item.height}
+                  x1={item.x1}
+                  y1={item.y1}
                   x2={item.x2}
                   y2={item.y2}/>
+              )
+            case 'IMAGE':
+              return(
+                <Image
+                  key={id}
+                  id={id}
+                  type={item.type}
+                  left={item.left}
+                  top={item.top}
+                  width={item.width}
+                  height={item.height}
+                  url={item.url}
+                  popup={item.popup}/>
               )
             default: 
                 return(

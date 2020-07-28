@@ -2,9 +2,9 @@ import { FC } from 'react';
 import { connect } from 'react-redux';
 import { useDrag } from 'react-dnd';
 
-import { SquareContainer } from '../styles/Mapping';
+import { ImageContainer } from '../styles/Mapping';
 
-export interface SquareProps {
+export interface ImageProps {
     dispatch: any;
     id: number;
     type: string;
@@ -23,7 +23,7 @@ export interface SquareProps {
     popup: string;
 }
 
-export const SquareComponent: FC<SquareProps> = ({
+export const ImageComponent: FC<ImageProps> = ({
     dispatch,
 
     id,
@@ -67,40 +67,44 @@ export const SquareComponent: FC<SquareProps> = ({
         dispatch({ type: 'UPDATE_VECTOR', rleft, rtop, rwidth, rheight });
 
         return(
-            <SquareContainer
+            <ImageContainer
                 ref={drag}
                 style={{ left: rleft, top: rtop, width: rwidth, height: rheight }}
                 data-id={id}
                 data-type={type}
                 onClick={(e: any) => dispatch({ type: 'RESIZE_ITEM_UPDATE' })}
-            />
+            >
+                <img id={`image-${id}`}/>
+            </ImageContainer>
         )
     } else if (url) {
         return (
             <a href={url}>
-                <SquareContainer
+                <ImageContainer
                     ref={drag}
                     style={{ left, top, width, height }}
                     data-id={id}
                     data-type={type}
-                />
+                >
+                    <img id={`image-${id}`}/>
+                </ImageContainer>
             </a>
         )
     } else {
         return (
-            <SquareContainer
+            <ImageContainer
                 ref={drag}
                 style={{ left, top, width, height }}
                 data-id={id}
                 data-type={type}
-                data-popup={popup}
-                onClick={(e: any) => dispatch({ type: 'OPEN_POPUP', popup })}
-            />
+            >
+                <img id={`image-${id}`}/>
+            </ImageContainer>
         )
     }
 }
 
-export const Square = connect(
+export const Image = connect(
     (state: any) => ({
         selectedItem: state.selectedItem,
         resizingItem: state.resizingItem,
@@ -108,4 +112,4 @@ export const Square = connect(
         mouseX: state.mouseX,
         mouseY: state.mouseY,
     })
-)(SquareComponent);
+)(ImageComponent);
