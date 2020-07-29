@@ -3,6 +3,8 @@ import { createStore, AnyAction, applyMiddleware, compose } from 'redux';
 import { MakeStore, createWrapper, Context, HYDRATE } from 'next-redux-wrapper';
 
 export interface State {
+    ethAccounts: Array<string>;
+    activeSpace: string;
     menu: boolean;
     menuType: string;
     selectedItem: number;
@@ -26,6 +28,8 @@ export interface State {
 };
 
 export const initialState = {
+    ethAccounts: [],
+    activeSpace: 'metamap',
     menu: false,
     menuType: 'normal',
     selectedItem: -1,
@@ -65,7 +69,16 @@ export function reducer(state: State = initialState, action: AnyAction) {
 
     switch (action.type) {
         case HYDRATE:
-            return { ...state, ...action.payload }
+            return { ...state, ...action.payload };
+        case 'LOADED_3BOX_URL':
+            state.items = action.data;
+            return { ...state };
+        case 'UPDATE_3BOX_URL':
+            state.activeSpace = action.value;
+            return { ...state };
+        case 'UPDATE_ETH_ACCOUNTS':
+            state.ethAccounts = action.accounts;
+            return { ...state };
         case 'MOUSE_POSITION':
             state.mouseX = action.x;
             state.mouseY = action.y;
